@@ -1,0 +1,51 @@
+<%- include('../layouts/header', { title: 'Manage Parents' }) %>
+<%- include('../layouts/sidebar') %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Manage Parents</h2>
+  <% if (editParent) { %><a href="/admin/parents" class="btn btn-secondary btn-sm">Cancel Edit</a><% } %>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header"><%= editParent ? 'Edit Parent' : 'Add Parent' %></div>
+  <div class="card-body">
+    <form action="<%= editParent ? '/admin/parents/' + editParent.id + '/update' : '/admin/parents' %>" method="POST" class="row g-3">
+      <div class="col-md-3"><label class="form-label">Name</label><input name="name" class="form-control" value="<%= editParent ? editParent.name : '' %>" required></div>
+      <div class="col-md-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control" value="<%= editParent ? editParent.email : '' %>" required></div>
+      <div class="col-md-3"><label class="form-label">Password <%= editParent ? '(leave blank to keep)' : '' %></label><input type="password" name="password" class="form-control" <%= editParent ? '' : 'required' %>></div>
+      <div class="col-md-2">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+          <option value="active" <%= editParent && editParent.status === 'active' ? 'selected' : '' %>>Active</option>
+          <option value="inactive" <%= editParent && editParent.status === 'inactive' ? 'selected' : '' %>>Inactive</option>
+        </select>
+      </div>
+      <div class="col-md-1 d-flex align-items-end"><button class="btn btn-primary w-100">Save</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-striped">
+      <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+      <tbody>
+        <% parents.forEach((parent) => { %>
+          <tr>
+            <td><%= parent.name %></td>
+            <td><%= parent.email %></td>
+            <td><span class="badge <%= parent.status === 'active' ? 'bg-success' : 'bg-secondary' %>"><%= parent.status %></span></td>
+            <td><%= formatDate(parent.created_at) %></td>
+            <td class="d-flex gap-1 flex-wrap">
+              <a href="/admin/parents/<%= parent.id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+              <form action="/admin/parents/<%= parent.id %>/toggle" method="POST"><button class="btn btn-sm btn-info">Toggle</button></form>
+              <form action="/admin/parents/<%= parent.id %>/delete" method="POST" class="confirm-delete"><button class="btn btn-sm btn-danger">Delete</button></form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../layouts/footer') %>

@@ -1,0 +1,51 @@
+<%- include('../layouts/header', { title: 'Manage Teachers' }) %>
+<%- include('../layouts/sidebar') %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Manage Teachers</h2>
+  <% if (editTeacher) { %><a href="/admin/teachers" class="btn btn-secondary btn-sm">Cancel Edit</a><% } %>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header"><%= editTeacher ? 'Edit Teacher' : 'Add Teacher' %></div>
+  <div class="card-body">
+    <form action="<%= editTeacher ? '/admin/teachers/' + editTeacher.id + '/update' : '/admin/teachers' %>" method="POST" class="row g-3">
+      <div class="col-md-3"><label class="form-label">Name</label><input name="name" class="form-control" value="<%= editTeacher ? editTeacher.name : '' %>" required></div>
+      <div class="col-md-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control" value="<%= editTeacher ? editTeacher.email : '' %>" required></div>
+      <div class="col-md-3"><label class="form-label">Password <%= editTeacher ? '(leave blank to keep)' : '' %></label><input type="password" name="password" class="form-control" <%= editTeacher ? '' : 'required' %>></div>
+      <div class="col-md-2">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+          <option value="active" <%= editTeacher && editTeacher.status === 'active' ? 'selected' : '' %>>Active</option>
+          <option value="inactive" <%= editTeacher && editTeacher.status === 'inactive' ? 'selected' : '' %>>Inactive</option>
+        </select>
+      </div>
+      <div class="col-md-1 d-flex align-items-end"><button class="btn btn-primary w-100">Save</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-striped">
+      <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+      <tbody>
+        <% teachers.forEach((teacher) => { %>
+          <tr>
+            <td><%= teacher.name %></td>
+            <td><%= teacher.email %></td>
+            <td><span class="badge <%= teacher.status === 'active' ? 'bg-success' : 'bg-secondary' %>"><%= teacher.status %></span></td>
+            <td><%= formatDate(teacher.created_at) %></td>
+            <td class="d-flex gap-1 flex-wrap">
+              <a href="/admin/teachers/<%= teacher.id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+              <form action="/admin/teachers/<%= teacher.id %>/toggle" method="POST"><button class="btn btn-sm btn-info">Toggle</button></form>
+              <form action="/admin/teachers/<%= teacher.id %>/delete" method="POST" class="confirm-delete"><button class="btn btn-sm btn-danger">Delete</button></form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../layouts/footer') %>

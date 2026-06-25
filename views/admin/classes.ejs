@@ -1,0 +1,50 @@
+<%- include('../layouts/header', { title: 'Manage Classes' }) %>
+<%- include('../layouts/sidebar') %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Manage Classes</h2>
+  <% if (editClass) { %><a href="/admin/classes" class="btn btn-secondary btn-sm">Cancel Edit</a><% } %>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header"><%= editClass ? 'Edit Class' : 'Add Class' %></div>
+  <div class="card-body">
+    <form action="<%= editClass ? '/admin/classes/' + editClass.id + '/update' : '/admin/classes' %>" method="POST" class="row g-3">
+      <div class="col-md-3"><label class="form-label">Class Name</label><input name="name" class="form-control" value="<%= editClass ? editClass.name : '' %>" placeholder="Grade 5" required></div>
+      <div class="col-md-2"><label class="form-label">Section</label><input name="section" class="form-control" value="<%= editClass ? editClass.section : '' %>" placeholder="A" required></div>
+      <div class="col-md-5">
+        <label class="form-label">Teacher</label>
+        <select name="teacher_id" class="form-select" required>
+          <option value="">Select Teacher</option>
+          <% teachers.forEach((teacher) => { %>
+            <option value="<%= teacher.id %>" <%= editClass && Number(editClass.teacher_id) === Number(teacher.id) ? 'selected' : '' %>><%= teacher.name %> (<%= teacher.email %>)</option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="col-md-2 d-flex align-items-end"><button class="btn btn-primary w-100">Save</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-striped">
+      <thead><tr><th>Class</th><th>Section</th><th>Assigned Teacher</th><th>Actions</th></tr></thead>
+      <tbody>
+        <% classes.forEach((classItem) => { %>
+          <tr>
+            <td><%= classItem.name %></td>
+            <td><%= classItem.section %></td>
+            <td><%= classItem.teacher_name || 'Not assigned' %></td>
+            <td class="d-flex gap-1 flex-wrap">
+              <a href="/admin/classes/<%= classItem.id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+              <form action="/admin/classes/<%= classItem.id %>/delete" method="POST" class="confirm-delete"><button class="btn btn-sm btn-danger">Delete</button></form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../layouts/footer') %>

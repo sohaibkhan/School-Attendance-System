@@ -1,0 +1,61 @@
+<%- include('../layouts/header', { title: 'Attendance Reports' }) %>
+<%- include('../layouts/sidebar') %>
+
+<h2 class="mb-3">Attendance Reports</h2>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="GET" action="/admin/reports" class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label">Class</label>
+        <select name="class_id" class="form-select">
+          <option value="">All Classes</option>
+          <% classes.forEach((classItem) => { %>
+            <option value="<%= classItem.id %>" <%= Number(filters.class_id) === Number(classItem.id) ? 'selected' : '' %>><%= classItem.name %> - <%= classItem.section %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Student</label>
+        <select name="student_id" class="form-select">
+          <option value="">All Students</option>
+          <% students.forEach((student) => { %>
+            <option value="<%= student.id %>" <%= Number(filters.student_id) === Number(student.id) ? 'selected' : '' %>><%= student.name %> (<%= student.roll_number %>)</option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="col-md-2"><label class="form-label">Date</label><input type="date" name="attendance_date" value="<%= filters.attendance_date || '' %>" class="form-control"></div>
+      <div class="col-md-2">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+          <option value="">All</option>
+          <option value="Present" <%= filters.status === 'Present' ? 'selected' : '' %>>Present</option>
+          <option value="Absent" <%= filters.status === 'Absent' ? 'selected' : '' %>>Absent</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-flex align-items-end"><button class="btn btn-primary w-100">Filter</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-striped">
+      <thead><tr><th>Date</th><th>Student</th><th>Roll</th><th>Class</th><th>Teacher</th><th>Status</th></tr></thead>
+      <tbody>
+        <% records.forEach((record) => { %>
+          <tr>
+            <td><%= formatDate(record.attendance_date) %></td>
+            <td><%= record.student_name %></td>
+            <td><%= record.roll_number %></td>
+            <td><%= record.class_name %> - <%= record.section %></td>
+            <td><%= record.teacher_name || '-' %></td>
+            <td><span class="badge <%= record.status === 'Present' ? 'badge-present' : 'badge-absent' %>"><%= record.status %></span></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../layouts/footer') %>

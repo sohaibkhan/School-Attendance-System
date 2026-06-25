@@ -1,0 +1,23 @@
+<%- include('../layouts/header', { title: 'My Classes' }) %>
+<%- include('../layouts/sidebar') %>
+
+<h2 class="mb-3">My Assigned Classes</h2>
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-striped">
+      <thead><tr><th>Class</th><th>Section</th><th>Total Students</th><th>Action</th></tr></thead>
+      <tbody>
+        <% classes.forEach((classItem) => { %>
+          <tr>
+            <td><%= classItem.name %></td>
+            <td><%= classItem.section %></td>
+            <td><%= classItem.total_students %></td>
+            <td><a class="btn btn-sm btn-primary" href="/teacher/attendance?class_id=<%= classItem.id %>">Take Attendance</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../layouts/footer') %>

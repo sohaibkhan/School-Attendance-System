@@ -1,0 +1,46 @@
+body {
+  background: #f7f9fc;
+}
+
+.login-page {
+  background: linear-gradient(135deg, #eef4ff, #ffffff);
+}
+
+.sidebar .nav-link {
+  display: block;
+  color: #333;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+.sidebar .nav-link:hover {
+  background: #e9f1ff;
+  color: #0d6efd;
+}
+
+.card-summary {
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+.badge-present {
+  background: #198754;
+}
+
+.badge-absent {
+  background: #dc3545;
+}
+
+.demo-box {
+  background: #f8f9fa;
+  border: 1px dashed #ced4da;
+  padding: 12px;
+  border-radius: 10px;
+}

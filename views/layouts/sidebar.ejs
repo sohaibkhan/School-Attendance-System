@@ -1,0 +1,41 @@
+<aside class="col-md-3 col-lg-2 sidebar bg-light border-end min-vh-100 p-3">
+  <% if (user && user.role === 'admin') { %>
+    <div class="small text-muted text-uppercase mb-2">Admin Portal</div>
+    <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+    <a class="nav-link" href="/admin/teachers">Teachers</a>
+    <a class="nav-link" href="/admin/parents">Parents</a>
+    <a class="nav-link" href="/admin/students">Students</a>
+    <a class="nav-link" href="/admin/classes">Classes</a>
+    <a class="nav-link" href="/admin/reports">Reports</a>
+  <% } %>
+
+  <% if (user && user.role === 'teacher') { %>
+    <div class="small text-muted text-uppercase mb-2">Teacher Portal</div>
+    <a class="nav-link" href="/teacher/dashboard">Dashboard</a>
+    <a class="nav-link" href="/teacher/classes">My Classes</a>
+    <a class="nav-link" href="/teacher/attendance">Take Attendance</a>
+    <a class="nav-link" href="/teacher/records">Attendance Records</a>
+  <% } %>
+
+  <% if (user && user.role === 'parent') { %>
+    <div class="small text-muted text-uppercase mb-2">Parent Portal</div>
+    <a class="nav-link" href="/parent/dashboard">Dashboard</a>
+    <a class="nav-link" href="/parent/attendance">Child Attendance</a>
+    <a class="nav-link" href="/parent/notifications">Notifications</a>
+  <% } %>
+</aside>
+
+<main class="col-md-9 col-lg-10 p-4">
+  <% if (success) { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <%= success %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% } %>
+
+  <% if (error) { %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <%= error %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% } %>

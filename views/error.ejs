@@ -1,0 +1,10 @@
+<%- include('layouts/header', { title: 'Error' }) %>
+<%- include('layouts/sidebar') %>
+<div class="card border-danger">
+  <div class="card-body">
+    <h3 class="text-danger">Error</h3>
+    <p><%= message %></p>
+    <a href="/" class="btn btn-primary">Go Back</a>
+  </div>
+</div>
+<%- include('layouts/footer') %>

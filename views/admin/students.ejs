@@ -1,0 +1,73 @@
+<%- include('../layouts/header', { title: 'Manage Students' }) %>
+<%- include('../layouts/sidebar') %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Manage Students</h2>
+  <% if (editStudent) { %><a href="/admin/students" class="btn btn-secondary btn-sm">Cancel Edit</a><% } %>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header"><%= editStudent ? 'Edit Student' : 'Add Student' %></div>
+  <div class="card-body">
+    <form action="<%= editStudent ? '/admin/students/' + editStudent.id + '/update' : '/admin/students' %>" method="POST" class="row g-3">
+      <div class="col-md-3"><label class="form-label">Student Name</label><input name="name" class="form-control" value="<%= editStudent ? editStudent.name : '' %>" required></div>
+      <div class="col-md-2"><label class="form-label">Roll Number</label><input name="roll_number" class="form-control" value="<%= editStudent ? editStudent.roll_number : '' %>" required></div>
+      <div class="col-md-3">
+        <label class="form-label">Class</label>
+        <select name="class_id" class="form-select" required>
+          <option value="">Select Class</option>
+          <% classes.forEach((classItem) => { %>
+            <option value="<%= classItem.id %>" <%= editStudent && Number(editStudent.class_id) === Number(classItem.id) ? 'selected' : '' %>><%= classItem.name %> - <%= classItem.section %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+          <option value="active" <%= editStudent && editStudent.status === 'active' ? 'selected' : '' %>>Active</option>
+          <option value="inactive" <%= editStudent && editStudent.status === 'inactive' ? 'selected' : '' %>>Inactive</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-flex align-items-end"><button class="btn btn-primary w-100">Save</button></div>
+
+      <div class="col-12">
+        <label class="form-label">Linked Parent(s)</label>
+        <div class="row g-2">
+          <% parents.forEach((parent) => { %>
+            <div class="col-md-4">
+              <label class="border rounded p-2 w-100 bg-white">
+                <input type="checkbox" name="parent_ids" value="<%= parent.id %>" <%= selectedParentIds.includes(Number(parent.id)) ? 'checked' : '' %>>
+                <%= parent.name %> <span class="text-muted small">(<%= parent.email %>)</span>
+              </label>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-striped">
+      <thead><tr><th>Name</th><th>Roll</th><th>Class</th><th>Parents</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        <% students.forEach((student) => { %>
+          <tr>
+            <td><%= student.name %></td>
+            <td><%= student.roll_number %></td>
+            <td><%= student.class_name ? student.class_name + ' - ' + student.section : '-' %></td>
+            <td><%= student.parent_names || '-' %></td>
+            <td><span class="badge <%= student.status === 'active' ? 'bg-success' : 'bg-secondary' %>"><%= student.status %></span></td>
+            <td class="d-flex gap-1 flex-wrap">
+              <a href="/admin/students/<%= student.id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+              <form action="/admin/students/<%= student.id %>/delete" method="POST" class="confirm-delete"><button class="btn btn-sm btn-danger">Delete</button></form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../layouts/footer') %>
